@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".TasksActivity">
+
+    <!-- Top Image as Background -->
+    <ImageView
+        android:id="@+id/topBackground"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:background="@drawable/design_one" />
+
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/topBackground"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="-223dp"
+        android:layout_marginEnd="12dp"
+        android:background="@drawable/lavender_border"
+        android:focusable="false"
+        app:closeIcon="@drawable/baseline_close_24"
+        app:iconifiedByDefault="false"
+        app:queryHint="Search..."
+        app:searchHintIcon="@null"
+        android:textColor="@android:color/white"
+        app:searchIcon="@drawable/baseline_search_24" />
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/search"
+        android:layout_marginTop="24dp"
+        android:color="@color/lavender"
+        android:scrollbars="vertical" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginBottom="40dp"
+        android:textColor="@android:color/white"
+        android:backgroundTint="@color/lavender"
+        android:src="@drawable/baseline_add_24"
+        app:tint="@color/white"
+        android:contentDescription="Add a new task"/>
+
+    <!-- Bottom Image as Background -->
+    <ImageView
+        android:id="@+id/bottomBackground"
+        android:layout_width="match_parent"
+        android:layout_height="224dp"
+        android:background="@drawable/design_two"
+        android:layout_alignParentBottom="true"/>
+
+</RelativeLayout>
