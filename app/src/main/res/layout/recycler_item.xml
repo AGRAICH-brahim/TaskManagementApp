@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/recCard"
+    android:layout_marginStart="12dp"
+    android:layout_marginEnd="12dp"
+    android:layout_marginHorizontal="10dp"
+    android:layout_marginVertical="10dp"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="8dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_gravity="center"
+        android:orientation="horizontal">
+
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/recImage"
+            android:layout_width="82dp"
+            android:layout_height="110dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="10dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/uploadimg"
+            app:shapeAppearanceOverlay="@style/roundedImageViewRounded"
+            tools:ignore="MissingClass" />
+
+        <View
+            android:layout_width="0.5dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="2dp"
+            android:alpha="0.5"
+            android:background="@color/purple" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_weight="0.2"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_marginTop="15dp"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/recTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:singleLine="true"
+                    android:textColor="@android:color/black"
+                    android:textSize="20sp"
+                    tools:text="Full house" />
+
+
+                <ImageView
+                    android:id="@+id/options"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:background="@drawable/baseline_more_horiz_24" />
+
+            </LinearLayout>
+
+
+
+
+            <TextView
+                android:id="@+id/recDesc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:alpha="0.5"
+                android:singleLine="true"
+                android:textColor="@android:color/black"
+                android:textSize="14sp"
+                tools:text="Full House is the Grand prize in any Tambola game played. It means all 15 Numbers of a ticket are cut, striked out" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:id="@+id/recDate"
+                    android:layout_width="100dp"
+                    android:layout_height="30dp"
+                    android:layout_toEndOf="@id/recTitle"
+                    android:paddingTop="10dp"
+                    android:text="DATE"
+                    android:textAlignment="textStart"
+                    android:textColor="@android:color/black"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:id="@+id/time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:alpha="0.5"
+                    android:singleLine="true"
+                    android:textColor="@android:color/black"
+                    android:textSize="12sp"
+                    tools:text="ferfefreferferf" />
+
+                <TextView
+                    android:id="@+id/status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:layout_marginTop="10dp"
+                    android:paddingLeft="70dp"
+                    android:paddingTop="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingBottom="5dp"
+                    android:text="UNCAMING"
+                    android:textColor="@android:color/black"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+
+</androidx.cardview.widget.CardView>
