@@ -28,6 +28,7 @@ import java.util.List;
 
 public class ListTask extends Fragment {
     private List<DataTask> listTasks;
+    private List<DataTask> filteredTasks; // Ajouter cette ligne
     private RecyclerView taskRecyclerView;
     private MyAdapter adapter;
     private FirebaseAuth auth;
@@ -43,6 +44,7 @@ public class ListTask extends Fragment {
 
         taskRecyclerView = rootView.findViewById(R.id.taskRecyclerView);
         listTasks = new ArrayList<>();
+        filteredTasks = new ArrayList<>(); // Initialiser la liste filtrée
         db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
 
@@ -50,7 +52,6 @@ public class ListTask extends Fragment {
 
         return rootView;
     }
-
 
     private void getTasks() {
         FirebaseUser currentUser = auth.getCurrentUser();
@@ -71,6 +72,7 @@ public class ListTask extends Fragment {
                             );
                             listTasks.add(tsk);
                         }
+                        filteredTasks.addAll(listTasks); // Ajouter toutes les tâches à la liste filtrée
                         setupRecyclerView();
                     } else {
                         Log.d("ListTask", "Error getting documents: ", task.getException());
@@ -83,7 +85,23 @@ public class ListTask extends Fragment {
     private void setupRecyclerView() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         taskRecyclerView.setLayoutManager(layoutManager);
-        adapter = new MyAdapter(getActivity(), listTasks);
+        adapter = new MyAdapter(getActivity(), filteredTasks); // Utiliser la liste filtrée
         taskRecyclerView.setAdapter(adapter);
+    }
+
+    // Méthode pour filtrer les tâches en fonction du texte de recherche
+    public void filterTasks(String searchText) {
+        filteredTasks.clear();
+        if (searchText.isEmpty()) {
+            filteredTasks.addAll(listTasks); // Si la recherche est vide, afficher toutes les tâches
+        } else {
+            // Parcourir toutes les tâches pour trouver celles qui correspondent au texte de recherche
+            for (DataTask task : listTasks) {
+                if (task.getTitle().toLowerCase().contains(searchText.toLowerCase())) {
+                    filteredTasks.add(task);
+                }
+            }
+        }
+        adapter.notifyDataSetChanged(); // Rafraîchir l'affichage de la liste
     }
 }

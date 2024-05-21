@@ -1,5 +1,6 @@
 package com.example.task_management;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -7,14 +8,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.example.task_management.crud.UpdateTask;
 import com.github.clans.fab.FloatingActionButton;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -28,8 +26,6 @@ public class TaskDetails extends AppCompatActivity {
     String imageUrl = "";
     FloatingActionButton deleteButton, editButton, doneButton;
     FirebaseFirestore db;
-    FirebaseAuth auth;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +41,6 @@ public class TaskDetails extends AppCompatActivity {
         deleteButton = findViewById(R.id.deleteButton);
 
         db = FirebaseFirestore.getInstance();
-        auth = FirebaseAuth.getInstance(); // Initialiser l'authentification Firebase
 
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
@@ -56,28 +51,6 @@ public class TaskDetails extends AppCompatActivity {
             detailTime.setText(bundle.getString("Time"));
             imageUrl = bundle.getString("Image");
         }
-
-        deleteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                db.collection("User").document(auth.getCurrentUser().getEmail()).collection("Tasks").document(detailTitle.getText().toString()).delete()
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void unused) {
-                                Toast.makeText(TaskDetails.this,"task deleted",Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(TaskDetails.this,TasksActivity.class);
-                                startActivity(intent);
-                                finish();
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(TaskDetails.this, "Error deleting contact", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-            }
-        });
-
 
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,25 +65,46 @@ public class TaskDetails extends AppCompatActivity {
             }
         });
 
-
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                deleteTask(detailTitle.getText().toString());
+            }
+        });
     }
 
     private void deleteTask(String title) {
-        db.collection("User").document(FirebaseAuth.getInstance().getCurrentUser().getEmail()).collection("Tasks")
+        String userEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+        db.collection("User").document(userEmail).collection("Tasks")
                 .whereEqualTo("title", title)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     if (!queryDocumentSnapshots.isEmpty()) {
-                        for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots.getDocuments()) {
-                            db.collection("Tasks").document(documentSnapshot.getId())
-                                    .delete()
-                                    .addOnSuccessListener(aVoid -> {
-                                        Toast.makeText(TaskDetails.this, "Task deleted successfully", Toast.LENGTH_SHORT).show();
-                                        finish(); // Close the activity after deletion
-                                    })
-                                    .addOnFailureListener(e -> {
-                                        Toast.makeText(TaskDetails.this, "Error deleting task: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                    });
+                        AlertDialog.Builder builder = new AlertDialog.Builder(TaskDetails.this);
+                        builder.setCancelable(false);
+                        builder.setView(R.layout.progress_layout);
+
+                        if (!isFinishing() && !isDestroyed()) {
+                            AlertDialog dialog = builder.create();
+                            dialog.show();
+
+                            for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots.getDocuments()) {
+                                // Utiliser la bonne référence pour supprimer le document de la collection "Tasks" sous "User"
+                                db.collection("User").document(userEmail).collection("Tasks")
+                                        .document(documentSnapshot.getId())
+                                        .delete()
+                                        .addOnSuccessListener(aVoid -> {
+                                            Toast.makeText(TaskDetails.this, "Task deleted successfully", Toast.LENGTH_SHORT).show();
+                                            dialog.dismiss(); // Dismiss the dialog after deletion
+                                            finish(); // Close the activity after deletion
+                                        })
+                                        .addOnFailureListener(e -> {
+                                            Toast.makeText(TaskDetails.this, "Error deleting task: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                            dialog.dismiss(); // Dismiss the dialog on failure
+                                        });
+                            }
+                        } else {
+                            Toast.makeText(TaskDetails.this, "Cannot show dialog, activity is finishing or destroyed", Toast.LENGTH_SHORT).show();
                         }
                     } else {
                         Toast.makeText(TaskDetails.this, "Task not found", Toast.LENGTH_SHORT).show();
@@ -120,4 +114,6 @@ public class TaskDetails extends AppCompatActivity {
                     Toast.makeText(TaskDetails.this, "Error finding task: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
     }
+
+
 }

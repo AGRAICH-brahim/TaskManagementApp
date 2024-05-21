@@ -41,7 +41,6 @@ public class AuthActivity extends AppCompatActivity {
             startActivity(new Intent(AuthActivity.this,TasksActivity.class));
             finish();
         }
-
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

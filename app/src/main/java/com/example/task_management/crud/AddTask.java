@@ -1,9 +1,12 @@
 package com.example.task_management.crud;
 
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -23,6 +26,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.task_management.AlarmReceiver;
 import com.example.task_management.R;
 import com.example.task_management.TasksActivity;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -35,6 +39,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.util.Calendar;
 import java.util.HashMap;
 
 
@@ -124,10 +129,10 @@ public class AddTask extends AppCompatActivity {
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
 
                 //Showing the picked value in the textView
-                uploadDate.setText(String.valueOf(year)+ "."+String.valueOf(month)+ "."+String.valueOf(day));
+                uploadDate.setText(String.valueOf(year)+ "-"+String.valueOf(month)+ "-"+String.valueOf(day));
 
             }
-        }, 2023, 01, 20);
+        }, 2024, 05, 20);
 
         datePickerDialog.show();
     }
@@ -235,5 +240,50 @@ public class AddTask extends AppCompatActivity {
                 .addOnFailureListener(e -> {
                     Toast.makeText(AddTask.this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
+        // Planification de l'alarme
+        scheduleAlarm(Date, Time);
     }
+
+    private void scheduleAlarm(String date, String time) {
+        // Convertir la date et l'heure en millisecondes
+        // Vous devez implémenter cette logique pour convertir la date et l'heure en millisecondes
+        long alarmTime = convertDateTimeToMillis(date, time);
+
+        // Créer une intention pour l'alarme
+        Intent alarmIntent = new Intent(this, AlarmReceiver.class);
+        alarmIntent.putExtra("task_title", title); // Ajoutez des données supplémentaires si nécessaire
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        // Obtenez le gestionnaire d'alarme
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
+        // Planifiez l'alarme
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, alarmTime, pendingIntent);
+    }
+    private long convertDateTimeToMillis(String date, String time) {
+        try {
+            // Divisez la date en année, mois et jour
+            String[] dateParts = date.split("-");
+            int year = Integer.parseInt(dateParts[0]);
+            int month = Integer.parseInt(dateParts[1]) - 1; // Le mois commence à partir de 0
+            int day = Integer.parseInt(dateParts[2]);
+
+            // Divisez le temps en heure et minute
+            String[] timeParts = time.split(":");
+            int hour = Integer.parseInt(timeParts[0]);
+            int minute = Integer.parseInt(timeParts[1]);
+
+            // Créez une instance de Calendar et définissez la date et l'heure
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(year, month, day, hour, minute);
+
+            // Retournez le temps en millisecondes
+            return calendar.getTimeInMillis();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return -1; // En cas d'erreur, retournez -1
+        }
+    }
+
 }

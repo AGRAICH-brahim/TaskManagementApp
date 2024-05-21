@@ -41,6 +41,7 @@ public class RegisterActivity extends AppCompatActivity {
         signupButton = findViewById(R.id.signupButton);
         loginRedirectText = findViewById(R.id.loginRedirectText);
 
+
         if (auth.getCurrentUser() != null){
             startActivity(new Intent(RegisterActivity.this,TasksActivity.class));
             finish();

@@ -1,5 +1,6 @@
 package com.example.task_management.crud;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -64,8 +65,14 @@ public class AddNote extends AppCompatActivity {
         note.put("title", title);
         note.put("description", description);
 
+
         db.collection("User").document(userEmail).collection("Notes").add(note)
                 .addOnSuccessListener(documentReference -> {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(AddNote.this);
+                    builder.setCancelable(false);
+                    builder.setView(R.layout.progress_layout);
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
                     String documentId = documentReference.getId();
                     Toast.makeText(AddNote.this, "Note added successfully with ID: ", Toast.LENGTH_SHORT).show();
                     finish(); // Close the activity after successful addition

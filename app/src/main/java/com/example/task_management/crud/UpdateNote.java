@@ -1,5 +1,6 @@
 package com.example.task_management.crud;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -15,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.task_management.R;
 import com.example.task_management.TasksActivity;
+import com.example.task_management.fragment.ListNote;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -96,9 +98,10 @@ public class UpdateNote extends AppCompatActivity {
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
+
                         if (task.isSuccessful()){
                             Toast.makeText(UpdateNote.this, "Updated", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(UpdateNote.this, TasksActivity.class);
+                            Intent intent = new Intent(UpdateNote.this, ListNote.class);
                             startActivity(intent);
                             finish();
                         }
@@ -120,6 +123,11 @@ public class UpdateNote extends AppCompatActivity {
         }
 
         DocumentReference noteRef = db.collection("User").document(auth.getCurrentUser().getEmail()).collection("Notes").document(noteId);
+        AlertDialog.Builder builder = new AlertDialog.Builder(UpdateNote.this);
+        builder.setCancelable(false);
+        builder.setView(R.layout.progress_layout);
+        AlertDialog dialog = builder.create();
+        dialog.show();
         noteRef.delete()
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override

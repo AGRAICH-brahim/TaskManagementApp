@@ -1,15 +1,18 @@
 package com.example.task_management.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import com.example.task_management.AuthActivity; // Assurez-vous d'importer la bonne activité
 import com.example.task_management.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -21,6 +24,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 public class profile extends Fragment {
 
     TextView userNameView, emailView;
+    ImageView logoutImageView; // Ajouter cette ligne
     FirebaseFirestore db;
     FirebaseAuth auth;
 
@@ -33,7 +37,7 @@ public class profile extends Fragment {
         // Initialize views
         userNameView = rootView.findViewById(R.id.tv_name);
         emailView = rootView.findViewById(R.id.emailUser);
-
+        logoutImageView = rootView.findViewById(R.id.logoutImageView); // Ajouter cette ligne
 
         db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
@@ -65,6 +69,18 @@ public class profile extends Fragment {
             // Handle case where userEmail is null
             Toast.makeText(getContext(), "No authenticated user found", Toast.LENGTH_SHORT).show();
         }
+
+        // Set onClickListener for logout
+        logoutImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                auth.signOut();
+                Intent intent = new Intent(getActivity(), AuthActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                getActivity().finish();
+            }
+        });
 
         return rootView;
     }

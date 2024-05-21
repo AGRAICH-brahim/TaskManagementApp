@@ -59,6 +59,7 @@
             android:textSize="14sp" />
 
         <ImageView
+            android:id="@+id/logoutImageView"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_alignParentRight="true"
@@ -66,7 +67,8 @@
             android:layout_marginTop="15dp"
             android:adjustViewBounds="true"
             android:scaleType="centerInside"
-            android:src="@drawable/icon_settigns" />
+            android:src="@drawable/logout" />
+
 
     </RelativeLayout>
 
@@ -97,7 +99,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif-light"
-                    android:text="453K"
+                    android:text="Tasks"
                     android:textColor="@color/white"
                     android:textSize="25sp" />
 
@@ -134,7 +136,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif-light"
-                    android:text="873"
+                    android:text="Notes"
                     android:textColor="@color/white"
                     android:textSize="25sp" />
 
@@ -214,7 +216,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif-light"
-                    android:text="+1-202-555-0157"
+                    android:text="+212 626628212"
                     android:textColor="#000000"
                     android:textSize="18sp" />
 
@@ -272,13 +274,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif-light"
-                    android:text="facebook.com/joeytrib"
+                    android:text="Log Out"
                     android:textColor="#000000"
                     android:textSize="18sp" />
 
-                <View
+                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
+                    android:id="@+id/logoutUser"
                     android:layout_marginTop="15dp"
                     android:background="@color/black" />
 
